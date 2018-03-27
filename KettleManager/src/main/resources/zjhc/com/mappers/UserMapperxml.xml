@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zjhc.com.dao.UserDao">
+
+	<resultMap type="User" id="UserResult">
+		<result property="id" column="id"/>
+		<result property="userName" column="userName"/>
+		<result property="password" column="password"/>
+		<result property="nickName" column="nickName"/>
+		<result property="roleName" column="roleName"/>
+	</resultMap>
+	
+	<select id="login" parameterType="User" resultMap="UserResult">
+		select a.userName as userName,a.password as password,a.nickName as nickName,b.roleName as roleName from ZYFS_USERS a ,ZYFS_ROLES b 
+		where userName=#{userName} and password=#{password} and  a.roleId=b.id 
+	</select>
+	
+	<select id="getByUserName" parameterType="String" resultMap="UserResult">
+		select a.id as id ,a.userName as userName,a.password as password,a.nickName as nickName,b.roleName as roleName from ZYFS_USERS a ,ZYFS_ROLES b 
+		where userName=#{userName}  and  a.roleId=b.id 
+	</select>
+	
+	<update id="updatePassword" parameterType="User">
+	   update ZYFS_USERS
+		<set>
+			<if test="password!=null and password!='' ">
+				password=#{password},
+			</if>
+		</set>
+		where id=#{id}
+	
+	</update>
+	
+
+</mapper> 

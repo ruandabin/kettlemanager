@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zjhc.com.dao.JobLogDao">
+
+	<resultMap type="zjhc.com.entity.JobLog" id="JobLog">
+		<result property="id" column="id"/>
+		<result property="jobName" column="jobName"/>
+		<result property="srcType" column="srcType"/>
+		<result property="jobDesc" column="jobDesc"/>
+		<result property="batchDate" column="batchDate"/>
+		<result property="startTime" column="startTime"/>
+		<result property="endTime" column="endTime"/>
+		<result property="Status" column="Status"/>
+		<result property="sucessFlag" column="sucessFlag"/>
+		<result property="errLink" column="errLink"/>
+	</resultMap>
+	
+	<select id="listJobLog" parameterType="Map" resultMap="JobLog">
+		SELECT t.ID ,t.JOB_NAME jobName,t.SRC_TYPE srcType,t.JOB_DESC jobDesc,t.BATCH_DATE batchDate,
+		t.START_TIME startTIME,t.END_TIME endTime,t.STATUS "status" ,t.SUCESS_FLAG  sucessFlag,t.ERR_LINK errLink
+FROM ZYFS_JOB_RUNING_LOG t 
+		<where>
+		    <if test="jobName!=null and jobName!='' ">
+				and job_Name like #{jobName}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="Map" resultType="Long">
+		select count(*) from ZYFS_JOB_RUNING_LOG
+		<where>
+		    <if test="jobName!=null and jobName!='' ">
+				and job_Name like #{jobName}
+			</if>
+		</where>
+	</select>
+	
+	
+	<select id="listHisLog" parameterType="Map" resultMap="JobLog">
+		SELECT t.ID ,t.JOB_NAME jobName,t.SRC_TYPE srcType,t.JOB_DESC jobDesc,t.BATCH_DATE batchDate,
+		t.START_TIME startTIME,t.END_TIME endTime,t.STATUS "status" ,t.SUCESS_FLAG  sucessFlag,t.ERR_LINK errLink
+FROM ZYFS_JOB_HIS_LOG t 
+		<where>
+		    <if test="jobName!=null and jobName!='' ">
+				and job_Name like #{jobName}
+			</if>
+		</where>
+		ORDER BY t.BATCH_DATE DESC
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="countHis" parameterType="Map" resultType="Long">
+		select count(*) from ZYFS_JOB_HIS_LOG
+		<where>
+		    <if test="jobName!=null and jobName!='' ">
+				and job_Name like #{jobName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="listAllJobLog"  resultMap="JobLog">
+		SELECT t.ID ,t.JOB_NAME jobName,t.SRC_TYPE srcType,t.JOB_DESC jobDesc,t.BATCH_DATE batchDate,
+		t.START_TIME startTIME,t.END_TIME endTime,t.STATUS "status" ,t.SUCESS_FLAG  sucessFlag,t.ERR_LINK errLink
+FROM ZYFS_JOB_RUNING_LOG t 
+	</select>
+	
+</mapper> 

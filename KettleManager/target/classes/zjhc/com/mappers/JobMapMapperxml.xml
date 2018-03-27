@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="zjhc.com.dao.JobMapDao">
+
+	<resultMap type="zjhc.com.entity.JobMap" id="JobMap">
+		<result property="id" column="id"/>
+		<result property="jobName" column="jobName"/>
+		<result property="srcType" column="srcType"/>
+		<result property="dataFile" column="dataFile"/>
+		<result property="runTime" column="runTime"/>
+		<result property="isTrue" column="isTrue"/>
+		<result property="preProcs" column="preProcs"/>
+		<result property="status" column="status"/>
+		<result property="remark" column="remark"/>
+	</resultMap>
+	
+	
+	<select id="listJobMap" parameterType="Map" resultMap="JobMap">
+		SELECT ID as id,JOB_NAME AS jobName,SRC_TYPE AS srcType,DATA_FILE AS DATAFILE,RUN_TIME AS runTime, 
+		IS_TRUE AS isTrue,PRE_PROCS AS preProcs,STATUS AS STATUS,REMARK AS remark FROM ZYFS_ETL_JOB_MAP
+		<where>
+		    <if test="jobName!=null and jobName!='' ">
+				and job_Name like #{jobName}
+			</if>
+		</where>
+		<if test="start!=null and size!=null">
+			limit #{start},#{size}
+		</if>
+	</select>
+	
+	<select id="count" parameterType="Map" resultType="Long">
+		select count(*) from ZYFS_ETL_JOB_MAP
+		<where>
+		    <if test="jobName!=null and jobName!='' ">
+				and job_Name like #{jobName}
+			</if>
+		</where>
+	</select>
+	
+	
+	<insert id="addJobMap" parameterType="JobMap" >
+		INSERT INTO ZYFS_ETL_JOB_MAP 
+	(ID, JOB_NAME, SRC_TYPE, DATA_FILE, RUN_TIME, IS_TRUE, PRE_PROCS, REMARK)VALUES
+	(null,#{jobName},#{srcType},#{dataFile},#{runTime},#{isTrue},#{preProcs},#{remark})
+
+	</insert> 
+	
+	<delete id="deleteJobMap" parameterType="Integer">
+		delete from ZYFS_ETL_JOB_MAP where id=#{id}
+	</delete>
+	
+	
+	<update id="updateJobMap" parameterType="JobMap" >
+		update ZYFS_ETL_JOB_MAP
+		<set>
+			<if test="jobName!=null and jobName!='' ">
+				JOB_NAME=#{jobName},
+			</if>
+			<if test="srcType!=null and srcType!='' ">
+				SRC_TYPE=#{srcType},
+			</if>
+			<if test="dataFile!=null and dataFile!='' ">
+				DATA_FILE=#{dataFile},
+			</if>
+			<if test="runTime!=null and runTime!='' ">
+				RUN_TIME=#{runTime},
+			</if>
+			<if test="isTrue!=null and isTrue!='' ">
+				IS_TRUE=#{isTrue},
+			</if>
+			<if test="preProcs!=null and preProcs!='' ">
+				PRE_PROCS=#{preProcs},
+			</if>
+			<if test="remark!=null and remark!='' ">
+				REMARK=#{remark},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
+	
+
+</mapper> 
